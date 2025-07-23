@@ -48,3 +48,39 @@ class Prediction(models.Model):
 
     def __str__(self):
         return f"{self.stock.ticker} - {self.date} - {self.prediction}"
+    
+class PriceChange(models.Model):
+    TIMEFRAME_CHOICES = [
+        ('day', 'Daily'),
+        ('week', 'Weekly'),
+        ('month', 'Monthly'),
+    ]
+
+    stock = models.ForeignKey(Stock, on_delete=models.CASCADE, null=False, blank=False)
+    date = models.DateField(null=False, blank=False)
+    timeframe = models.CharField(max_length=10, choices=TIMEFRAME_CHOICES, null=False, blank=False)
+    start_price = models.DecimalField(max_digits=20, decimal_places=10, null=True, blank=True)
+    end_price = models.DecimalField(max_digits=20, decimal_places=10, null=True, blank=True)
+    change_pct = models.FloatField(null=False, blank=False)
+    change_abs = models.DecimalField(max_digits=20, decimal_places=10, null=False, blank=False)
+
+    def __str__(self):
+        return f"{self.stock.ticker} - {self.timeframe} - Price Change: {self.change_pct:.2f}%"
+
+class SentimentChange(models.Model):
+    TIMEFRAME_CHOICES = [
+        ('day', 'Daily'),
+        ('week', 'Weekly'),
+        ('month', 'Monthly'),
+    ]
+
+    stock = models.ForeignKey(Stock, on_delete=models.CASCADE, null=False, blank=False)
+    date = models.DateField(null=False, blank=False)
+    timeframe = models.CharField(max_length=10, choices=TIMEFRAME_CHOICES, null=False, blank=False)
+    start_score = models.DecimalField(max_digits=5, decimal_places=3, null=True, blank=True)
+    end_score = models.DecimalField(max_digits=5, decimal_places=3, null=True, blank=True)
+    change_pct = models.FloatField(null=False, blank=False)
+    change_abs = models.DecimalField(max_digits=5, decimal_places=3, null=False, blank=False)
+
+    def __str__(self):
+        return f"{self.stock.ticker} - {self.timeframe} - Sentiment Change: {self.change_pct:.2f}%"
