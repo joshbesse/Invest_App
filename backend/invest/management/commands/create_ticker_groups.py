@@ -1,0 +1,1 @@
+from invest.models import Stock
