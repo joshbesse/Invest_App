@@ -3,7 +3,7 @@ from invest.models import Stock
 import pandas as pd
 
 class Command(BaseCommand):
-    help = "Fill in stock table with tickers and names."
+    help = "Fill in stock table with tickers and names"
 
     def handle(self, *args, **options):
         # load S&P500 data from CSV file
