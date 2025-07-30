@@ -4,8 +4,6 @@ from datetime import date
 import os
 
 def get_today_ticker_group(json_path="../data/ticker_groups.json", manual_index=None):
-    print(os.getcwd())
-
     # create Path to ticker groups file
     groups_path = Path(json_path)
 

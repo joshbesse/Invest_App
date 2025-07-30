@@ -26,6 +26,9 @@ class Sentiment(models.Model):
 
     def __str__(self):
         return f"{self.stock.ticker} - {self.date} - {self.sentiment_score}"
+    
+    class Meta:
+        unique_together = ("stock", "date")
 
 class Price(models.Model):
     stock = models.ForeignKey(Stock, on_delete=models.CASCADE, null=False, blank=False)
@@ -38,6 +41,29 @@ class Price(models.Model):
 
     def __str__(self):
         return f"{self.stock.ticker} - {self.date} - {self.close_price}"
+    
+    class Meta:
+        unique_together = ("stock", "date")
+
+class Indicators(models.Model):
+    stock = models.ForeignKey(Stock, on_delete=models.CASCADE, null=False, blank=False)
+    date = models.DateField(null=False, blank=False)
+    pct_return_1d = models.FloatField(null=True, blank=True)
+    sma_10 = models.FloatField(null=True, blank=True)
+    macd = models.FloatField(null=True, blank=True)
+    macd_hist = models.FloatField(null=True, blank=True)
+    rsi_14 = models.FloatField(null=True, blank=True)
+    roc_10 = models.FloatField(null=True, blank=True)
+    atr_14 = models.FloatField(null=True, blank=True)
+    bollinger_bandwidth = models.FloatField(null=True, blank=True)
+    obv = models.FloatField(null=True, blank=True)
+    volume_change_1d = models.FloatField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.stock.ticker} - {self.date} - pct_return_1d: {self.pct_return_1d} - sma_10: {self.sma_10} - macd: {self.macd} - macd_hist: {self.macd_hist} - rsi_14: {self.rsi_14} - roc_10: {self.roc_10} - atr_14: {self.atr_14} - bollinger_bandwidth: {self.bollinger_bandwidth} - obv: {self.obv} - volume_change_1d: {self.volume_change_1d}"
+    
+    class Meta:
+        unique_together = ("stock", "date")
 
 class Prediction(models.Model):
     stock = models.ForeignKey(Stock, on_delete=models.CASCADE, null=False, blank=False)
@@ -48,6 +74,9 @@ class Prediction(models.Model):
 
     def __str__(self):
         return f"{self.stock.ticker} - {self.date} - {self.prediction}"
+    
+    class Meta:
+        unique_together = ("stock", "date")
     
 class PriceChange(models.Model):
     TIMEFRAME_CHOICES = [
@@ -66,6 +95,9 @@ class PriceChange(models.Model):
 
     def __str__(self):
         return f"{self.stock.ticker} - {self.timeframe} - Price Change: {self.change_pct:.2f}%"
+    
+    class Meta:
+        unique_together = ("stock", "date", "timeframe")
 
 class SentimentChange(models.Model):
     TIMEFRAME_CHOICES = [
@@ -84,3 +116,6 @@ class SentimentChange(models.Model):
 
     def __str__(self):
         return f"{self.stock.ticker} - {self.timeframe} - Sentiment Change: {self.change_pct:.2f}%"
+    
+    class Meta:
+        unique_together = ("stock", "date", "timeframe")

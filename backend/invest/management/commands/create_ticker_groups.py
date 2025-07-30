@@ -2,7 +2,6 @@ from django.core.management.base import BaseCommand
 from invest.models import Stock
 import random
 import json
-import os
 from pathlib import Path
 
 class Command(BaseCommand):
