@@ -1,9 +1,8 @@
 from pathlib import Path
 import json
 from datetime import date
-import os
 
-def get_today_ticker_group(json_path="../data/ticker_groups.json", manual_index=None):
+def get_today_ticker_group(json_path="invest/data/ticker_groups.json", manual_index=None):
     # create Path to ticker groups file
     groups_path = Path(json_path)
 
@@ -26,4 +25,4 @@ def get_today_ticker_group(json_path="../data/ticker_groups.json", manual_index=
         group_index = date.today().toordinal() % len(groups)
     
     # return group with set index
-    return groups[group_index]
+    return groups[group_index], group_index
