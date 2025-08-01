@@ -39,7 +39,6 @@ class Command(BaseCommand):
             logger.error(f"❌ Failed to fetch batch price data: {e}")
             return
 
-
         # split batch into individual ticker data
         try:
             ticker_data = split_batch_by_ticker(tickers, batch_data)
@@ -50,6 +49,9 @@ class Command(BaseCommand):
         
         success_count = 0
         failed = []
+
+        missing = [ticker for ticker in tickers if ticker not in ticker_data]
+        failed.extend(missing)
 
         # for each ticker data calculate indicators and store data
         for ticker, df in ticker_data.items():

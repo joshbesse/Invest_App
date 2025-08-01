@@ -13,8 +13,14 @@ def split_batch_by_ticker(tickers, batch_data):
     ticker_data = {}
 
     for ticker in tickers:
-        ticker_df = batch_data[ticker].copy().reset_index()
+        ticker_df = batch_data[ticker].copy()
+
+        if ticker_df.isna().all().all():
+            continue
+
+        ticker_df = ticker_df.reset_index()
         ticker_df["Ticker"] = ticker
+
         ticker_data[ticker] = ticker_df
 
     return ticker_data
