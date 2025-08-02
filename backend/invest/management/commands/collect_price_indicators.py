@@ -58,7 +58,7 @@ class Command(BaseCommand):
             try:
                 df = calculate_indicators(df)
                 df = df.tail(10)
-                #store_price_and_indicators(df)
+                store_price_and_indicators(ticker, df)
                 success_count += 1
             except Exception as e:
                 logger.error(f"❌ {ticker} failed: {e}")

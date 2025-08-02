@@ -46,9 +46,9 @@ def calculate_indicators(ticker_data):
 
     return ticker_data
 
-def store_price_and_indicators(complete_data):
+def store_price_and_indicators(ticker, complete_data):
     # store price data in Price and indicator data in Indicators
-    stock = Stock.objects.get(ticker=complete_data["Ticker"])
+    stock = Stock.objects.get(ticker=ticker)
 
     for _, row in complete_data.iterrows():
         Price.objects.get_or_create(
