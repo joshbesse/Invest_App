@@ -13,11 +13,13 @@ class Text(models.Model):
     date = models.DateField(null=False, blank=False)
     source = models.TextField(null=True, blank=True)
     url = models.TextField(null=True, blank=True)
-    content = models.TextField(null=False, blank=False)
+    title = models.TextField(null=False, blank=False)
+    description = models.TextField(null=True, blank=True)
+    content = models.TextField(null=True, blank=True)
     sentiment_score = models.DecimalField(max_digits=5, decimal_places=3, null=False, blank=False)
 
     def __str__(self):
-        return f"{self.stock.ticker} - {self.date} - {self.sentiment_score}"
+        return f"{self.stock.ticker} - {self.date} - {self.title} - {self.sentiment_score}"
 
 class Sentiment(models.Model):
     stock = models.ForeignKey(Stock, on_delete=models.CASCADE, null=False, blank=False)
