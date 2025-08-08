@@ -17,6 +17,7 @@ class Text(models.Model):
     description = models.TextField(null=True, blank=True)
     content = models.TextField(null=True, blank=True)
     sentiment_score = models.DecimalField(max_digits=5, decimal_places=3, null=False, blank=False)
+    sentiment_label = models.CharField(max_length=15, null=False, blank=False)
 
     def __str__(self):
         return f"{self.stock.ticker} - {self.date} - {self.title} - {self.sentiment_score}"
@@ -24,6 +25,7 @@ class Text(models.Model):
 class Sentiment(models.Model):
     stock = models.ForeignKey(Stock, on_delete=models.CASCADE, null=False, blank=False)
     date = models.DateField(null=False, blank=False)
+    num_texts = models.SmallIntegerField(null=True, blank=True)
     sentiment_score = models.DecimalField(max_digits=5, decimal_places=3, null=False, blank=False)
 
     def __str__(self):
