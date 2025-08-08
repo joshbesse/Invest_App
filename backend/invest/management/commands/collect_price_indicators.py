@@ -57,7 +57,7 @@ class Command(BaseCommand):
         for ticker, df in ticker_data.items():
             try:
                 df = calculate_indicators(df)
-                df = df.tail(10)
+                df = df.tail(1)
                 store_price_and_indicators(ticker, df)
                 success_count += 1
             except Exception as e:
