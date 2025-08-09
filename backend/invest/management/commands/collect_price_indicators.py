@@ -57,12 +57,12 @@ class Command(BaseCommand):
         for ticker, df in ticker_data.items():
             try:
                 df = calculate_indicators(df)
-                df = df.tail(1)
+                df = df.tail(5)
                 store_price_and_indicators(ticker, df)
                 success_count += 1
             except Exception as e:
-                logger.error(f"❌ {ticker} failed: {e}")
                 failed.append(ticker)
+                logger.error(f"❌ {ticker} failed: {e}")
         
         logger.info(f"✅ Pipeline complete - {success_count} succeeded, {len(failed)} failed")
         if failed:

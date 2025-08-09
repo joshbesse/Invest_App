@@ -21,6 +21,9 @@ class Text(models.Model):
 
     def __str__(self):
         return f"{self.stock.ticker} - {self.date} - {self.title} - {self.sentiment_score}"
+    
+    class Meta:
+        unique_together = ("stock", "url")
 
 class Sentiment(models.Model):
     stock = models.ForeignKey(Stock, on_delete=models.CASCADE, null=False, blank=False)
