@@ -4,7 +4,7 @@ from invest.utils.sentiment import fetch_news_data, analyze_sentiment, store_tex
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import logging
 from pathlib import Path
-from datetime import date
+import datetime
 
 log_file = Path("invest/logs/sentiment_pipeline.log")
 
@@ -22,7 +22,7 @@ class Command(BaseCommand):
     help = "Collect, perform sentiment analysis, and insert text data in Text table and average sentiment in Sentiment table"
 
     def handle(self, *args, **options):
-        logger.info(f"Date: {date.today()}")
+        logger.info(f"Date: {datetime.date.today()}")
 
         # get ticker group for that day
         try:

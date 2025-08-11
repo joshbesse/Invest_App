@@ -9,6 +9,8 @@ from invest.models import Stock, Text, Sentiment
 
 load_dotenv()
 
+#def build_newsapi_params()
+
 def fetch_news_data(tickers, days_back=5):
     # fetch news articles and headlines from newsapi
     api_key = os.getenv("NEWSAPI_KEY")
