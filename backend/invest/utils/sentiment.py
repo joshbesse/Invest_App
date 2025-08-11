@@ -9,7 +9,38 @@ from invest.models import Stock, Text, Sentiment
 
 load_dotenv()
 
-#def build_newsapi_params()
+def build_newsapi_params(ticker):
+    company = Stock.objects.get(ticker=ticker).name
+
+    ticker_patterns = [
+        f'"${ticker}"',                  
+        f'"NASDAQ:{ticker}"',
+        f'"NYSE:{ticker}"',
+        f'"{ticker}.O"',                 
+        f'"{ticker}.N"',
+        f'"{ticker} UW"',                
+        f'"{ticker} US"',
+        f'"{ticker}"'               
+    ]
+
+    name_patterns = {company}
+    if company.endswith("Inc"):
+        name_patterns |= {f'"{company}."', f'"{company}, Inc."', f'"{company} Inc."'}
+    elif company.endswith("Inc."):
+        name_patterns |= {f'"{company[:-1]}"', f'"{company}, Inc."'}
+
+    finance_terms = [
+        "earnings","guidance","revenue","profit","loss","EPS","forecast",
+        "shares","stock","trading","market","downgrade","upgrade","rating",
+        "dividend","buyback","split","merger","acquisition","price target",
+        "sec filing","10-k","10-q","8-k","ipo","offering"
+    ]
+
+    company_block = "(" + " OR ".join(sorted(ticker_patterns | {f'"{ticker}"'} | name_patterns)) + ")"
+    context_block = "(" + " OR ".join(finance_terms) + ")"
+
+    q = f"{company_block} AND {context_block}"
+    return q
 
 def fetch_news_data(tickers, days_back=5):
     # fetch news articles and headlines from newsapi
@@ -23,7 +54,7 @@ def fetch_news_data(tickers, days_back=5):
 
     for ticker in tickers:
         params = {
-            "q": f'"{ticker}" AND (stock OR earnings OR shares OR trading OR market)',
+            "q": build_newsapi_params(ticker),
             "from": from_date,
             "to": today,
             "sortBy": "relevancy",
