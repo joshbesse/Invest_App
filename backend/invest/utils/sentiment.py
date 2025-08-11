@@ -36,7 +36,7 @@ def build_newsapi_params(ticker):
         "sec filing","10-k","10-q","8-k","ipo","offering"
     ]
 
-    company_block = "(" + " OR ".join(sorted(ticker_patterns | {f'"{ticker}"'} | name_patterns)) + ")"
+    company_block = "(" + " OR ".join(sorted(set(ticker_patterns) | {f'"{ticker}"'} | name_patterns)) + ")"
     context_block = "(" + " OR ".join(finance_terms) + ")"
 
     q = f"{company_block} AND {context_block}"
@@ -58,6 +58,7 @@ def fetch_news_data(tickers, days_back=5):
             "from": from_date,
             "to": today,
             "sortBy": "relevancy",
+            "searchIn": "title,description",
             "language": "en",
             "pageSize": 100,
             "apiKey": api_key
@@ -94,12 +95,15 @@ def analyze_sentiment(text, tokenizer, model):
     with torch.no_grad():
         outputs = model(**inputs)
         probs = F.softmax(outputs.logits, dim=1)
-    
+
+    prob_neutral, prob_positive, prob_negative = probs[0,0], probs[0,1], probs[0,2]
+    score = (prob_positive - prob_negative) * (1 - prob_neutral)
+
     sentiment_id = torch.argmax(probs, dim=1).item()
     label = model.config.id2label[sentiment_id]
-    score = probs[0][sentiment_id].item()
 
     return score, label
+
 
 def store_text(ticker, text, score, label):
     stock = Stock.objects.get(ticker=ticker)
