@@ -97,7 +97,7 @@ def analyze_sentiment(text, tokenizer, model):
         probs = F.softmax(outputs.logits, dim=1)
 
     prob_neutral, prob_positive, prob_negative = probs[0,0], probs[0,1], probs[0,2]
-    score = (prob_positive - prob_negative) * (1 - prob_neutral)
+    score = ((prob_positive - prob_negative) * (1 - prob_neutral)).item()
 
     sentiment_id = torch.argmax(probs, dim=1).item()
     label = model.config.id2label[sentiment_id]
